@@ -15,6 +15,9 @@ function onSubmit() {
   auth.signIn(email.value, password.value, () => {
     awaiting.value = false
     router.push('/')
+  }, () => {
+    awaiting.value = false
+    console.log('Não foi dessa vez!');
   })
 
 }
