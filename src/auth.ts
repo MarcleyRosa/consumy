@@ -55,6 +55,10 @@ function signOut(andThen: () => void) {
 
 }
 
+function isLoggedIn() {
+  return Boolean(storage.get('token'))
+}
+
 function currentUser() {
   if (!loggedIn()) {
     return null
@@ -70,5 +74,6 @@ export const auth = {
   signIn,
   loggedIn,
   currentUser,
+  isLoggedIn,
   signOut
 }
