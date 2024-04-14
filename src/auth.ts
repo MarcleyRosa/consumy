@@ -51,10 +51,6 @@ function signOut(andThen: () => void) {
   storage.remove('token')
   storage.remove('email')
 
-  // if (typeof andThen === 'function') {
-  //   andThen()
-  // }
-
   andThen()
 
 }
