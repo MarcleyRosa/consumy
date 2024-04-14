@@ -27,7 +27,7 @@ function onSubmit() {
   <div>
     <h1>Sign In</h1>
 
-    <form @submit.prevent="onSubmit()" action="">
+    <form @submit.prevent="onSubmit" action="">
 
       <label for="">E-mail:
         <input v-model="email" type="email">
