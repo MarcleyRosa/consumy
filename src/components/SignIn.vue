@@ -16,7 +16,7 @@ function onSubmit() {
   awaiting.value = true
   auth.signIn(email.value, password.value, () => {
     awaiting.value = false
-    router.push('/')
+    router.push('/stores')
   }, () => {
     awaiting.value = false
     console.log('Não foi dessa vez!');
@@ -27,6 +27,7 @@ function onSubmit() {
 </script>
 <template>
   <div>
+    <p>Email de test: pasquale.wisozk@example.com</p>
     <h1>Sign In</h1>
 
     <form @submit.prevent="onSubmit" action="">
