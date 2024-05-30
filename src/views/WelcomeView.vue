@@ -5,7 +5,6 @@ import UserProfile from '../components/UserProfile.vue'
 
 <template>
   <main>
-    <h1>Delivety: Welcome</h1>
     <UserProfile />
   </main>
 </template>
