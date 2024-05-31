@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { Request } from '../utils/fetch'
-import router from '@/router';
+import { useRouter } from 'vue-router';
 
 
 const data = ref([])
+const router = useRouter()
 
 const start = (event: MouseEvent) => {
   const { id } = event.target as HTMLButtonElement;
