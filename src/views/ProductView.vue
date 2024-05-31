@@ -2,10 +2,11 @@
 import ProductItem from '@/components/ProductItem.vue';
 import { Request } from '@/utils/fetch';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { formatCurrency } from '@/utils/formatCurrency';
 
 interface Product {
+  id: number,
   title: string,
   image: string,
   price: number
@@ -14,6 +15,16 @@ interface Product {
 const data = ref<Product>({} as Product)
 const quantity = ref(1)
 const route = useRoute()
+const router = useRouter()
+
+const addCart = async () => {
+  const request = new Request('http://localhost:3000')
+
+  await request.post('/cart/add_item', { product_id: data.value.id, quantity: quantity.value })
+
+  router.back()
+}
+
 onMounted(async () => {
   const request = new Request('http://localhost:3000')
 
@@ -28,7 +39,7 @@ onMounted(async () => {
     <span>{{  quantity }}</span>
     <button @click="() => quantity += 1">+</button>
 
-    <button class="checkout">Adicionar {{ formatCurrency(data.price * quantity)}}</button>
+    <button class="checkout" @click="addCart">Adicionar {{ formatCurrency(data.price * quantity)}}</button>
   </div>
 </template>
 
