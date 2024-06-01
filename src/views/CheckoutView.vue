@@ -1,19 +1,83 @@
 <script setup lang="ts">
 import { Request } from '@/utils/fetch';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-const data = ref([] as any)
+interface cartItems {
+  cart_id: number
+  id: number
+  price: number
+  product: {id: number, store_id: number, title: string, price: number, image: string }
+  product_id: string
+  quantity: number
+}
+interface orderId {
+  order: {
+    id: number
+  }
+}
+
+const data = ref([] as cartItems[])
 const total = ref(0)
+const router = useRouter()
+const message = ref('')
 
-onMounted(async() => {
-  const request = new Request('http://localhost:3000')
+const request = new Request('http://localhost:3000')
 
+const requestData = async () => {
   data.value = await request.get('/cart')
+  console.log(data.value);
+  
+  total.value = data.value.reduce((acc, curr) => acc += curr.price * curr.quantity, 0)
+}
+
+onMounted(() => {
+  requestData()
 })
 
-const remove = () => {
+watch(message, () => {
+  requestData()
+})
 
+watch(data, () => {
+  if (data.value.length === 0) router.push('/stores')
+})
+
+const remove = async (event: MouseEvent) => {
+  const { id } = event.target as HTMLButtonElement;
+
+  await request.delete(`/cart/remove_item/${id}`)
+  message.value = 'Produto removido!'
+  setTimeout(() => { message.value = ''}, 2000)
+}
+
+const edit = (event: MouseEvent) => {
+  const { id } = event.target as HTMLButtonElement;
+  const [items] = data.value
+  const { product: { store_id } } = items
+  router.push(`/store/${store_id}/products/${id}`)
+}
+
+const createOrder = async () => {
+
+  const cartItems = data.value
+  const [items] = cartItems
+  const { product: { store_id } } = items
+
+  const order_items = cartItems.map(({ price, product_id, quantity }) => ({ price, product_id, amount: quantity}))
+
+  const order = {
+    order: {
+      store_id
+    },
+    order_items
+}
+
+  const { order: { id }} = await request.post('/buyers/orders', order) as orderId
+  
+  await request.delete('/cart')
+  router.push(`/order/${id}`)
 }
 
 </script>
@@ -21,13 +85,17 @@ const remove = () => {
 <template>
   <div>
     <h1>Checkout</h1>
-    <div v-for="{ price, id, product: { title } } in data.cart_items" :key="id">
-      <p>{{ title }}</p>
-      <span>{{ formatCurrency(price) }}</span> <br>
-      <button @click="remove" :id=id>Entrar</button>
+    <div v-for="{ price, product_id, quantity, id, product: { title } } in data" :key="id">
+      <p>{{ `${quantity}x ${title}` }}</p>
+      <span>{{ formatCurrency(price * quantity) }}</span> <br>
+      <button @click="edit" :id="product_id">Editar</button>
+      <button @click="remove" :id="product_id">Remover</button>
       <br><br>
       <hr>
     </div>
-    <p>{{ `Total: ${total}` }}</p>
+    <p style="color: red;">{{ message }}</p>
+    <p>{{ `Total: ${formatCurrency(total)}` }}</p>
+
+    <button @click="createOrder">Fazer pedido</button>
   </div>
 </template>
