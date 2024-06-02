@@ -1,7 +1,6 @@
 <template>
   <div v-if="isVisible" class="modal-overlay" @click.self="close">
     <div class="modal-content">
-      <input type="text">
       <button class="close-button" @click="close">X</button>
       <slot></slot>
     </div>
@@ -9,11 +8,13 @@
 </template>
 
 <script setup lang="ts">
+import router from '@/router';
 import { ref } from 'vue';
 const isVisible = ref(true)
 
 const close = () => {
   isVisible.value = false
+  router.back()
 }
 
 </script>
