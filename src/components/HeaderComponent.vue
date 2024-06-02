@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import ModalCart from './ModalCart.vue';
 import NavBar from './NavBar.vue';
+import UserProfile from './UserProfile.vue';
 
 const isModal = ref(false)
 
@@ -9,16 +10,19 @@ const isModal = ref(false)
 </script>
 <template>
   <div class="cent">
-    <NavBar />
-    <button @click="() => isModal = !isModal">Carrinho</button>
     <div v-if="isModal">
       <ModalCart />
     </div>
+    <UserProfile />
+    <NavBar />
+    <button @click="() => isModal = !isModal">Carrinho</button>
   </div>
 </template>
 
 <style scoped>
   .cent {
+    display: flex;
+    justify-content: space-between;
     position: absolute;
     top: 0;
     left: 0;
