@@ -14,6 +14,7 @@ const signOut = () => {
   })
 }
 
+
 </script>
 
 <template>
@@ -24,7 +25,7 @@ const signOut = () => {
       </h3>
       <br>
       <nav>
-        <a @click="signOut">Logout</a>
+        <button @click="signOut">Logout</button>
       </nav>
     </template>
     <template v-else>
