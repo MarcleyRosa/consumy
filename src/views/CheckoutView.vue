@@ -1,22 +1,9 @@
 <script setup lang="ts">
 import { Request } from '@/utils/fetch';
 import { formatCurrency } from '@/utils/formatCurrency';
+import type { cartItems, orderId } from '@/utils/interfacesType';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-
-interface cartItems {
-  cart_id: number
-  id: number
-  price: number
-  product: {id: number, store_id: number, title: string, price: number, image: string }
-  product_id: string
-  quantity: number
-}
-interface orderId {
-  order: {
-    id: number
-  }
-}
 
 const data = ref([] as cartItems[])
 const total = ref(0)
