@@ -4,6 +4,7 @@ import { Request } from '@/utils/fetch';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { formatCurrency } from '@/utils/formatCurrency';
+import ModalComponent from '@/components/ModalComponent.vue';
 
 interface Product {
   id: number,
@@ -33,15 +34,17 @@ onMounted(async () => {
 
 </script>
 <template>
-  <div>
-    <ProductItem :title="data.title" :image="data.image" :price="data.price" />
-    <button :disabled="quantity === 1" @click="() => quantity -= 1">-</button>
-    <span>{{  quantity }}</span>
-    <button @click="() => quantity += 1">+</button>
-
-    <button class="checkout" @click="addCart">Adicionar {{ formatCurrency(data.price * quantity)}}</button>
-  </div>
-</template>
+  <ModalComponent>
+    <div>
+      <ProductItem :title="data.title" :image="data.image" :price="data.price" />
+      <button :disabled="quantity === 1" @click="() => quantity -= 1">-</button>
+      <span>{{  quantity }}</span>
+      <button @click="() => quantity += 1">+</button>
+      
+      <button class="checkout" @click="addCart">Adicionar {{ formatCurrency(data.price * quantity)}}</button>
+    </div>
+  </ModalComponent>
+  </template>
 
 <style scoped>
   .checkout {
