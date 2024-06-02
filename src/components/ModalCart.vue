@@ -3,22 +3,74 @@
     <div v-if="isVisible" class="sidebar-modal-overlay" @click.self="close"></div>
     <div v-if="isVisible" class="sidebar-modal-content container">
       <button class="close-button" @click="close">X</button>
-
+      
       <slot></slot>
+
+    <div v-if="data.length > 0">
+      <div v-for="{ price, product_id, quantity, id, product: { title, image } } in data" :key="id">
+        <img class="image" :src="image" alt="">
+        <p>{{ `${quantity}x ${title}` }}</p>
+        <span>{{ formatCurrency(price * quantity) }}</span> <br>
+        <button @click="edit" :id="product_id">Editar</button>
+        <button @click="remove" :id="product_id">Remover</button>
+        <br><br>
+        <hr>
+      </div>
+      <p style="color: red;">{{ message }}</p>
+      <p>{{ `Total: ${formatCurrency(total)}` }}</p>
       <button class="button" @click="checkout">Escolher forma de pagamento</button>
+    </div>
+    <p v-else>Carrinho vazio</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { Request } from '@/utils/fetch';
+import { formatCurrency } from '@/utils/formatCurrency';
+import type { cartItems } from '@/utils/interfacesType';
+import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 
 const isVisible = ref(true)
 const router = useRouter()
 
+const data = ref([] as cartItems[])
+const total = ref(0)
+const message = ref('')
+
+const request = new Request('http://localhost:3000')
+
+const requestData = async () => {
+  data.value = await request.get('/cart')
+  console.log(data.value);
+  
+  total.value = data.value.reduce((acc, curr) => acc += curr.price * curr.quantity, 0)
+}
+
+onMounted(() => {
+  requestData()
+})
+
+
 const close = () => {
+  isVisible.value = false
+}
+
+const remove = async (event: MouseEvent) => {
+  const { id } = event.target as HTMLButtonElement;
+
+  await request.delete(`/cart/remove_item/${id}`)
+  message.value = 'Produto removido!'
+  setTimeout(() => { message.value = ''}, 2000)
+}
+
+const edit = (event: MouseEvent) => {
+  const { id } = event.target as HTMLButtonElement;
+  const [items] = data.value
+  const { product: { store_id } } = items
+  router.push(`/store/${store_id}/products/${id}`)
   isVisible.value = false
 }
 
@@ -61,6 +113,10 @@ const checkout = () => {
   border: none;
   font-size: 16px;
   cursor: pointer;
+}
+
+.image {
+  width: 60px;
 }
 
 body {
