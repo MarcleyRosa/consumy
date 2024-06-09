@@ -6,8 +6,9 @@ import { useRoute } from 'vue-router';
 
 const data = ref([])
 const route = useRoute()
+const url = 'http://localhost:3000';
 onMounted(async () => {
-  const request = new Request('http://localhost:3000')
+  const request = new Request(url)
 
   data.value = await request.get(`/store/${route.params.id}/products`)
 })
@@ -17,9 +18,9 @@ onMounted(async () => {
 <template>
   <div>
     <h1>Products</h1>
-    <div v-for="{ title, id, price, image, store_id } in data" :key="id">
+    <div v-for="{ title, id, price, image_url, store_id } in data" :key="id">
       <router-link :to="{ name: 'store/product', params: { id, store_id } }">
-       <ProductItem :title="title" :price="price" :image="image" />
+       <ProductItem :title="title" :price="price" :image="url + image_url" />
       </router-link> <br> <br>
       <br><br>
       <hr>
