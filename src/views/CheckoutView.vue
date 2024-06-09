@@ -9,6 +9,10 @@ const data = ref([] as cartItems[])
 const total = ref(0)
 const router = useRouter()
 const message = ref('')
+const valid = defineModel('valid', { default: ''})
+const number = defineModel('number')
+const cvv = defineModel('cvv')
+
 
 const request = new Request('http://localhost:3000')
 
@@ -52,13 +56,16 @@ const createOrder = async () => {
   const [items] = cartItems
   const { product: { store_id } } = items
 
+  const payment = { valid: valid.value, cvv: cvv.value, number: number.value, value: total.value }
+
   const order_items = cartItems.map(({ price, product_id, quantity }) => ({ price, product_id, amount: quantity}))
 
   const order = {
     order: {
       store_id
     },
-    order_items
+    order_items,
+    payment
 }
 
   const { order: { id }} = await request.post('/buyers/orders', order) as orderId
@@ -80,6 +87,15 @@ const createOrder = async () => {
       <br><br>
       <hr>
     </div>
+    <label for="">Número do cartão
+        <input v-model="number" type="text"> <br>
+      </label>
+      <label for="">Validade <br>
+        <input v-model="valid" type="text"> <br>
+      </label>
+      <label for="">cvv <br>
+        <input v-model="cvv" type="number">
+      </label>
     <p style="color: red;">{{ message }}</p>
     <p>{{ `Total: ${formatCurrency(total)}` }}</p>
 
