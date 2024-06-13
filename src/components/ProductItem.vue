@@ -12,6 +12,6 @@ defineProps<{
   <div>
     <p>{{ title }}</p> <br>
     <p>{{ formatCurrency(price) }}</p>
-    <img width="100px" :src="image" alt="">
+    <img v-if="image" width="100px" :src="image" alt="">
   </div>
 </template>
