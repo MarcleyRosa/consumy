@@ -18,8 +18,6 @@ const request = new Request('http://localhost:3000')
 
 const requestData = async () => {
   data.value = await request.get('/cart')
-  console.log(data.value);
-  
   total.value = data.value.reduce((acc, curr) => acc += curr.price * curr.quantity, 0)
 }
 
@@ -68,10 +66,14 @@ const createOrder = async () => {
     payment
 }
 
+try {
   const { order: { id }} = await request.post('/buyers/orders', order) as orderId
   
   await request.delete('/cart')
   router.push(`/order/${id}`)
+} catch (error) {
+  console.log(error);
+}
 }
 
 </script>

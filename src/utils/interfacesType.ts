@@ -12,4 +12,15 @@ interface orderId {
   }
 }
 
-export type { orderId, cartItems}
+interface FullOrder {
+  id: number, buyer_id: number, store_id: number, created_at: string, updated_at: string, state: string, order_items: { id: number,
+  order_id: number,
+  product_id: number,
+  amount: number,
+  price: string,
+  created_at: string,
+  updated_at: string,
+  product: { id: 1, store_id: 1, title: string, price: string, created_at: string, updated_at: string, image_url: string }}[]
+}
+
+export type { orderId, cartItems, FullOrder }
