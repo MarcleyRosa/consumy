@@ -5,13 +5,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { formatCurrency } from '@/utils/formatCurrency';
 import ModalComponent from '@/components/ModalComponent.vue';
-
-interface Product {
-  id: number,
-  title: string,
-  image: string,
-  price: number
-}
+import type { Product } from '../utils/interfacesType'
 
 const data = ref<Product>({} as Product)
 const quantity = ref(1)
