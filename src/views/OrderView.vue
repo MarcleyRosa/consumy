@@ -4,7 +4,11 @@ import { Request } from '@/utils/fetch';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import type { FullOrder } from '../utils/interfacesType';
+import type { FullOrder, OptionsState } from '../utils/interfacesType';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { options, messageState } from '../utils';
+
+const state = ref<OptionsState>('loading')
 const route = useRoute()
 const data = ref<FullOrder>({
 order_items: [],
@@ -19,22 +23,36 @@ const url = 'http://localhost:3000';
 const total = ref(0)
 
 
-
 onMounted(async () => {
   const request = new Request(url)
 
   data.value = await request.get(`/order/${route.params.id}`)
 
   total.value = data.value.order_items.reduce((acc, curr) => acc += +curr.price * curr.amount, 0)
+
+  await fetchEventSource(`${url}/state/order/${route.params.id}`, {
+    ...options,
+    async onopen(response) {
+      if (response.ok) {
+        console.log('connect')
+        return
+      }
+    },
+    onmessage(msg) {
+      if (msg.event === 'state-order') {
+        const data = JSON.parse(msg.data)
+        state.value = data.state
+      }
+    }
+  })
 })
 </script>
 <template>
   <div>
-    <div v-for="{ product: { title, image_url }, amount, id, price, product_id } in data.order_items" :key="id">
-      <router-link :to="{ name: 'store/product', params: { id: product_id, store_id: data.store_id } }">
+    <p>{{ messageState[state] }}</p>
+    <div v-for="{ product: { title, image_url }, amount, id, price } in data.order_items" :key="id">
         <p>{{  amount }}</p>
        <ProductItem :title="title" :price="+price" :image="url + image_url" />
-      </router-link> <br> <br>
       <br><br>
       <hr>
     </div>
