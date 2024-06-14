@@ -3,7 +3,11 @@ import { ref } from 'vue';
 import ModalCart from './ModalCart.vue';
 import NavBar from './NavBar.vue';
 import UserProfile from './UserProfile.vue';
+import { useRoute, useRouter } from 'vue-router';
 
+
+const route = useRoute()
+const router = useRouter()
 const isModal = ref(false)
 
 
@@ -15,6 +19,7 @@ const isModal = ref(false)
     </div>
     <UserProfile />
     <NavBar />
+    <button v-if="route.path !== '/' && route.path !== '/signin'" @click="() => router.push('/orders')">Meus pedidos</button>
     <button @click="() => isModal = !isModal">Carrinho</button>
   </div>
 </template>
