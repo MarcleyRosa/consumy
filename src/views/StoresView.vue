@@ -29,8 +29,8 @@ onMounted(async() => {
 
     <h2><strong>Lojas:</strong></h2> <br>
 
-    <div v-for="{ name, id, image_url } in data" :key="id" :id="id">
-      <button @click="start" :id=id>
+    <div v-for="{ name, id, image_url, active } in data" :key="id" :id="id">
+      <button :disabled="!active" @click="start" :id=id>
         <span :id="id">{{ name }}</span> <br>
         <img :id="id" style="width: 100px;" :src="image_url ? url + image_url : imageStore" alt="">
       </button>
