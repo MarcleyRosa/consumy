@@ -15,7 +15,7 @@ const router = useRouter()
 const addCart = async () => {
   const request = new Request('http://localhost:3000')
 
-  await request.post('/cart/add_item', { product_id: data.value.id, quantity: quantity.value })
+  await request.post('/cart/add_item', { products: [{ product_id: data.value.id, quantity: quantity.value }]})
 
   router.back()
 }
