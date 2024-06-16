@@ -3,7 +3,7 @@ import ProductItem from '@/components/ProductItem.vue';
 import { Request } from '@/utils/fetch';
 import { formatCurrency } from '@/utils/formatCurrency';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import type { FullOrder, OptionsState } from '../utils/interfacesType';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { options, messageState } from '../utils';
@@ -21,10 +21,21 @@ state: ''
 })
 const url = 'http://localhost:3000';
 const total = ref(0)
+const router = useRouter()
+const request = new Request(url)
+
+const buyAgain = async () => {
+  const products = data.value.order_items.map(({ product_id, amount }) => {
+    return { product_id, quantity: amount }
+  })
+
+  await request.post('/cart/add_item', { products })
+
+  router.push('/checkout')
+}
 
 
 onMounted(async () => {
-  const request = new Request(url)
 
   data.value = await request.get(`/order/${route.params.id}`)
 
@@ -57,5 +68,6 @@ onMounted(async () => {
       <hr>
     </div>
     {{ `Total: ${formatCurrency(total)}` }}
+    <button @click="buyAgain">Pedir novamente</button>
   </div>
 </template>
