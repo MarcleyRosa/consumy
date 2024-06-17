@@ -12,7 +12,7 @@ const isModal = ref(false)
 
 </script>
 <template>
-  <div class="bg-white shadow-md py-4">
+  <div v-if="route.path !== '/' && route.path !== '/signin'" class="bg-white shadow-md py-4">
     <div class="container mx-auto flex justify-between items-center">
       <div>
         <div v-if="isModal">
@@ -22,19 +22,19 @@ const isModal = ref(false)
       </div>
       <div class="flex items-center space-x-4">
         <button
-          v-if="route.path !== '/' && route.path !== '/signin'"
+          v-if="route.path !== '/orders'"
           @click="() => router.push('/orders')"
           class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
         >
           Meus pedidos
         </button>
         <button
-          v-if="route.path !== '/' && route.path !== '/signin'"
           @click="() => isModal = !isModal"
           class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
         >
           Carrinho
         </button>
+        <button @click="router.push('/stores')">Pagina Inicial</button>
       </div>
     </div>
   </div>

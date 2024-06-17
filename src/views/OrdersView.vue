@@ -17,16 +17,17 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div>
-    <div v-for="order in data?.orders" :key="order.id">
-      <button style="width: 250px;" @click="() => router.push(`/order/${order.id}`)">
-        <p>{{ formatDate(order.created_at) }}</p>
-        <p :id="messageState[order.state] !== 'completed' ? 'state' : 'no-state'">{{ messageState[order.state] }}</p>
+  <div class="p-4 text-center">
+    <h1 class="text-3xl font-bold mb-4">Meus Pedidos</h1>
+    <div v-for="order in data?.orders" :key="order.id" class="mb-4 p-4 border rounded-lg shadow-md">
+      <button @click="() => router.push(`/order/${order.id}`)" class="w-full text-left">
+        <p class="text-gray-700 font-semibold mb-2">{{ formatDate(order.created_at) }}</p>
+        <p :class="{ 'text-red-500': messageState[order.state] !== 'completed', 'text-green-500': messageState[order.state] === 'completed' }">{{ messageState[order.state] }}</p>
         <div v-for="{ product: { title }, id } in order.order_items" :key="id">
-          <p>{{ title }}</p>
+          <p class="text-sm text-gray-600">{{ title }}</p>
         </div>
-        </button>
-      </div>
+      </button>
+    </div>
   </div>
 </template>
 
