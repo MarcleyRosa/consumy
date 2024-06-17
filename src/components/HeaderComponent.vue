@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import ModalCart from './ModalCart.vue';
-import NavBar from './NavBar.vue';
 import UserProfile from './UserProfile.vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -13,16 +12,35 @@ const isModal = ref(false)
 
 </script>
 <template>
-  <div class="cent">
-    <div v-if="isModal">
-      <ModalCart />
+  <div class="bg-white shadow-md py-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <div>
+        <div v-if="isModal">
+          <ModalCart />
+        </div>
+        <UserProfile />
+      </div>
+      <div class="flex items-center space-x-4">
+        <button
+          v-if="route.path !== '/' && route.path !== '/signin'"
+          @click="() => router.push('/orders')"
+          class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+        >
+          Meus pedidos
+        </button>
+        <button
+          v-if="route.path !== '/' && route.path !== '/signin'"
+          @click="() => isModal = !isModal"
+          class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+        >
+          Carrinho
+        </button>
+      </div>
     </div>
-    <UserProfile />
-    <NavBar />
-    <button v-if="route.path !== '/' && route.path !== '/signin'" @click="() => router.push('/orders')">Meus pedidos</button>
-    <button @click="() => isModal = !isModal">Carrinho</button>
   </div>
 </template>
+
+
 
 <style scoped>
   .cent {

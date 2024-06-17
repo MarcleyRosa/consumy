@@ -3,8 +3,7 @@ import { formatCurrency } from '../utils/formatCurrency'
 
 defineProps<{
   title: string,
-  price: number,
-  image: string
+  price: number
 }>()
 
 </script>
@@ -12,6 +11,5 @@ defineProps<{
   <div>
     <p>{{ title }}</p> <br>
     <p>{{ formatCurrency(price) }}</p>
-    <img v-if="image" width="100px" :src="image" alt="">
   </div>
 </template>
