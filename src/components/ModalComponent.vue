@@ -1,7 +1,7 @@
 <template>
-  <div v-if="isVisible" class="modal-overlay" @click.self="close">
-    <div class="modal-content">
-      <button class="close-button" @click="close">X</button>
+  <div v-if="isVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" @click.self="close">
+    <div class="bg-white p-6 rounded-lg shadow-lg relative max-w-lg w-full">
+      <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700" @click="close">X</button>
       <slot></slot>
     </div>
   </div>
@@ -16,7 +16,6 @@ const close = () => {
   isVisible.value = false
   router.back()
 }
-
 </script>
 
 <style scoped>
@@ -49,4 +48,3 @@ const close = () => {
   cursor: pointer;
 }
 </style>
-
