@@ -2,7 +2,7 @@ interface cartItems {
   cart_id: number
   id: number
   price: number
-  product: {id: number, store_id: number, title: string, price: number, image: string }
+  product: {id: number, store_id: number, title: string, price: number, image_url: string }
   product_id: string
   quantity: number
 }
@@ -49,7 +49,7 @@ interface Orders {
 interface Product {
   id: number,
   title: string,
-  image: string,
+  image_url: string,
   price: number
 }
 

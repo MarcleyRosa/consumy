@@ -59,15 +59,18 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div>
-    <p>{{ messageState[state] }}</p>
-    <div v-for="{ product: { title, image_url }, amount, id, price } in data.order_items" :key="id">
-        <p>{{  amount }}</p>
-       <ProductItem :title="title" :price="+price" :image="url + image_url" />
-      <br><br>
-      <hr>
+  <div class="p-6 bg-white rounded-lg shadow-md">
+    <p class="text-lg font-semibold mb-4">{{ messageState[state] }}</p>
+    <div v-for="{ product: { title, image_url }, amount, id, price } in data.order_items" :key="id" class="mb-6 border border-gray-300 rounded-lg p-4">
+      <div class="flex items-center">
+        <p class="mr-4 text-gray-700 font-medium">{{ `${amount} x` }}</p>
+        <ProductItem :title="title" :price="+price" class="flex-1"/>
+        <img :src="url + image_url" alt="" class="w-16 h-16 object-cover ml-4 rounded">
+      </div>
     </div>
-    {{ `Total: ${formatCurrency(total)}` }}
-    <button @click="buyAgain">Pedir novamente</button>
+    <p class="text-xl font-bold mb-4">{{ `Total: ${formatCurrency(total)}` }}</p>
+    <button v-if="messageState[state] === 'completed'" @click="buyAgain" class="px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold rounded-full shadow-lg hover:from-green-500 hover:to-blue-600 transition duration-300 ease-in-out transform hover:-translate-y-1">
+      Pedir novamente
+    </button>
   </div>
 </template>

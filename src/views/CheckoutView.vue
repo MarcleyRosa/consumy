@@ -4,6 +4,7 @@ import { formatCurrency } from '@/utils/formatCurrency';
 import type { cartItems, orderId } from '@/utils/interfacesType';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import noImage from '../assets/produto-sem-foto.png'
 
 const data = ref([] as cartItems[])
 const total = ref(0)
@@ -12,9 +13,10 @@ const message = ref('')
 const valid = defineModel('valid', { default: ''})
 const number = defineModel('number')
 const cvv = defineModel('cvv')
+const url = 'http://localhost:3000'
 
 
-const request = new Request('http://localhost:3000')
+const request = new Request(url)
 
 const requestData = async () => {
   data.value = await request.get('/cart')
@@ -79,28 +81,74 @@ try {
 </script>
 
 <template>
-  <div>
-    <h1>Checkout</h1>
-    <div v-for="{ price, product_id, quantity, id, product: { title } } in data" :key="id">
-      <p>{{ `${quantity}x ${title}` }}</p>
-      <span>{{ formatCurrency(price * quantity) }}</span> <br>
-      <button @click="edit" :id="product_id">Editar</button>
-      <button @click="remove" :id="product_id">Remover</button>
-      <br><br>
-      <hr>
+  <div class="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h1 class="text-3xl font-extrabold text-gray-900 mb-8">Checkout</h1>
+    <div
+      v-for="{ price, product_id, quantity, id, product: { title, image_url } } in data"
+      :key="id"
+      class="flex items-center py-4 border-t border-gray-200"
+    >
+      <img
+        :src="image_url ? url + image_url : noImage"
+        alt=""
+        class="w-20 h-20 object-cover rounded-lg mr-6"
+      />
+      <div class="flex-1">
+        <p class="text-xl font-semibold text-gray-800">{{ `${quantity}x ${title}` }}</p>
+        <span class="text-lg text-gray-600">{{ formatCurrency(price * quantity) }}</span>
+      </div>
+      <div class="flex space-x-4">
+        <button
+          @click="edit"
+          :id="product_id"
+          class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition duration-300"
+        >
+          Editar
+        </button>
+        <button
+          @click="remove"
+          :id="product_id"
+          class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition duration-300"
+        >
+          Remover
+        </button>
+      </div>
     </div>
-    <label for="">Número do cartão
-        <input v-model="number" type="text"> <br>
+    <h3 class="text-2xl font-bold text-gray-900 mt-8 mb-4">Pagamento:</h3>
+    <div class="grid grid-cols-1 gap-6">
+      <label class="block">
+        <span class="text-gray-700">Número do cartão</span>
+        <input
+          v-model="number"
+          type="text"
+          class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+        />
       </label>
-      <label for="">Validade <br>
-        <input v-model="valid" type="text"> <br>
+      <label class="block">
+        <span class="text-gray-700">Validade</span>
+        <input
+          v-model="valid"
+          type="text"
+          class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+        />
       </label>
-      <label for="">cvv <br>
-        <input v-model="cvv" type="number">
+      <label class="block">
+        <span class="text-gray-700">CVV</span>
+        <input
+          v-model="cvv"
+          type="number"
+          class="mt-1 block w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"
+        />
       </label>
-    <p style="color: red;">{{ message }}</p>
-    <p>{{ `Total: ${formatCurrency(total)}` }}</p>
-
-    <button @click="createOrder">Fazer pedido</button>
+    </div>
+    <p class="text-red-600 mt-4">{{ message }}</p>
+    <p class="text-2xl font-bold text-gray-900 mt-6">{{ `Total: ${formatCurrency(total)}` }}</p>
+    <button
+      @click="createOrder"
+      class="mt-6 bg-green-600 text-white w-full py-3 rounded-lg hover:bg-green-500 transition duration-300"
+    >
+      Fazer pedido
+    </button>
   </div>
 </template>
+
