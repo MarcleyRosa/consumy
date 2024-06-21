@@ -26,7 +26,7 @@ const signOut = () => {
 
 </script>
 <template>
-  <div v-if="route.path !== '/' && route.path !== '/signin'" class="bg-white shadow-md py-4">
+  <div v-if="route.path !== '/' && route.path !== '/signin'" class="bg-white shadow-md py-4 cent">
     <div class="container mx-auto flex justify-between items-center">
       <div>
         <div v-if="isModal">
@@ -64,13 +64,7 @@ const signOut = () => {
 
 <style scoped>
   .cent {
-    display: flex;
-    justify-content: space-between;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #f4f4f4;
+    background-color: darkgray;
     text-align: center;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);

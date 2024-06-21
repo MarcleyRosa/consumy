@@ -10,7 +10,7 @@ const currentUser = ref(auth.currentUser())
 </script>
 
 <template>
-  <main class="bg-white py-4">
+  <main class="bg-white py-4 cent">
     <div class="container mx-auto flex flex-col lg:flex-row justify-between items-center">
       <template v-if="currentUser">
         <div class="flex flex-col lg:flex-row items-center">
@@ -35,3 +35,12 @@ const currentUser = ref(auth.currentUser())
     </div>
   </main>
 </template>
+
+
+<style scoped>
+  .cent {
+    background-color: darkgray;
+    text-align: center;
+    padding: 10px;
+  }
+</style>
