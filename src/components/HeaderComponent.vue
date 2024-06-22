@@ -26,7 +26,7 @@ const signOut = () => {
 
 </script>
 <template>
-  <div v-if="route.path !== '/' && route.path !== '/signin'" class="bg-white shadow-md py-4 cent">
+  <div v-if="route.path !== '/' && route.path !== '/signin' && route.path !== '/signup'" class="bg-white shadow-md py-4 cent">
     <div class="container mx-auto flex justify-between items-center">
       <div>
         <div v-if="isModal">
