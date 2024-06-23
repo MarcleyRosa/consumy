@@ -52,5 +52,26 @@ interface Product {
   image_url: string,
   price: number
 }
+interface User {
+  id: number
+  email: string
+  created_at: string
+  updated_at: string
+  role: string
+  address: {
+    id: number
+    street: string
+    house_number: string
+    neighborhood: string
+    city: string
+    state: string
+    zip_code: string
+    country: string
+    user_id: number
+    created_at: string
+    updated_at: string
+  }
+}
 
-export type { orderId, cartItems, FullOrder, State, Orders, OptionsState, Product }
+
+export type { orderId, cartItems, FullOrder, State, Orders, OptionsState, Product, User }

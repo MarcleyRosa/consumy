@@ -2,8 +2,8 @@
 import { ref } from 'vue';
 import ModalCart from './ModalCart.vue';
 import UserProfile from './UserProfile.vue';
-import { useRoute, useRouter } from 'vue-router';
-import { PhShoppingCart, PhArrowArcLeft, PhSignOut, PhCalendarDots } from "@phosphor-icons/vue";
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { PhShoppingCart, PhArrowArcLeft, PhSignOut, PhCalendarDots, PhUserCircle } from "@phosphor-icons/vue";
 import { Auth } from '@/utils/auth';
 
 
@@ -35,6 +35,9 @@ const signOut = () => {
         <UserProfile />
       </div>
       <div class="flex items-center space-x-4">
+        <RouterLink :to="{ name: 'profile' }">
+          <PhUserCircle :size="32" weight="fill" />
+        </RouterLink>
         <button
           v-if="route.path !== '/orders'"
           @click="() => router.push('/orders')"
