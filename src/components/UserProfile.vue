@@ -12,7 +12,7 @@ const currentUser = ref(auth.currentUser())
 <template>
   <main class="bg-white py-4 cent">
     <div class="container mx-auto flex flex-col lg:flex-row justify-between items-center">
-      <template v-if="currentUser">
+      <template v-if="currentUser?.email">
         <div class="flex flex-col lg:flex-row items-center">
           <p class="text-sm lg:text-base font-semibold text-gray-800 mb-2 lg:mb-0">
             Hi, {{ currentUser && currentUser.email }}

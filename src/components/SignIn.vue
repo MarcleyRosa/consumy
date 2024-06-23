@@ -8,6 +8,7 @@ const email = defineModel('email', { default: ''})
 const password = defineModel('password', { default: ''})
 const remember = defineModel('remember', { default: false})
 const awaiting = ref(false)
+const message = ref('')
 
 const router = useRouter()
 
@@ -19,6 +20,7 @@ function onSubmit() {
     router.push('/stores')
   }, () => {
     awaiting.value = false
+    message.value = 'usuário ou senha inválido'
     console.log('Não foi dessa vez!');
   })
 
@@ -52,6 +54,7 @@ function onSubmit() {
             required
           />
         </div>
+        <p style="color: red" v-if="message">{{ message }}</p>
         <div class="flex items-center">
           <input
             v-model="remember"
