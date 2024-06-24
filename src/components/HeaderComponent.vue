@@ -14,12 +14,18 @@ const isModal = ref(false)
 const auth = new Auth()
 
 const isLoggedIn = ref(auth.isLoggedIn())
+const filter = defineModel('filter', { default: ''})
 
 const signOut = () => {
   auth.signOut(() => {
     isLoggedIn.value = auth.isLoggedIn()
   })
   router.push('/')
+}
+
+const onSubmit = () => {
+  router.push({ path: '/search/itens', query: { q: filter.value } })
+  filter.value = ''
 }
 
 
@@ -34,6 +40,13 @@ const signOut = () => {
         </div>
         <UserProfile />
       </div>
+      <!-- <PhMagnifyingGlass color="white" :size="20" weight="fill" />-->
+      <form @submit.prevent="onSubmit" class="space-y-4">
+      <div class="search-container">
+        <input v-model="filter" class="search-input" type="text" placeholder="Busque por item ou loja">
+        <button type="submit" style="display: none;"></button>
+      </div>
+      </form>
       <div class="flex items-center space-x-4">
         <RouterLink :to="{ name: 'profile' }">
           <PhUserCircle :size="32" weight="fill" />
@@ -65,11 +78,29 @@ const signOut = () => {
 
 
 
-<style scoped>
-  .cent {
-    background-color: darkgray;
-    text-align: center;
-    padding: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+<style>
+  .search-container {
+    position: relative;
+    display: inline-block;
+    width: 300px; /* Ajuste conforme necessário */
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 10px 30px 10px 10px; /* Ajuste o padding do input para acomodar o ícone */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+  }
+  
+  .search-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    fill: white; /* A cor do ícone */
+    width: 20px; /* O tamanho do ícone */
+    height: 20px;
+    pointer-events: none; /* Garante que o ícone não interfira com o clique no input */
   }
 </style>
