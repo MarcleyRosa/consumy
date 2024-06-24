@@ -82,15 +82,15 @@ const onSubmit = () => {
   .search-container {
     position: relative;
     display: inline-block;
-    width: 300px; /* Ajuste conforme necessário */
+    width: 300px;
   }
   
   .search-input {
     width: 100%;
-    padding: 10px 30px 10px 10px; /* Ajuste o padding do input para acomodar o ícone */
+    padding: 10px 30px 10px 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+    font-size: 16px;
   }
   
   .search-icon {
@@ -98,9 +98,9 @@ const onSubmit = () => {
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-    fill: white; /* A cor do ícone */
-    width: 20px; /* O tamanho do ícone */
+    fill: white;
+    width: 20px;
     height: 20px;
-    pointer-events: none; /* Garante que o ícone não interfira com o clique no input */
+    pointer-events: none;
   }
 </style>
