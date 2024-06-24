@@ -12,6 +12,10 @@ interface orderId {
   }
 }
 
+interface Store {
+  name: string, id: string, image_url: string, active: boolean
+}
+
 type OptionsState = 'loading' |'created' | 'paid' | 'accepted' | 'prepared' | 'shipped' | 'completed'
 
 interface FullOrder {
@@ -51,6 +55,8 @@ interface Product {
   title: string,
   image_url: string,
   price: number
+  store_id: number,
+  stock: number
 }
 interface User {
   id: number
@@ -74,4 +80,4 @@ interface User {
 }
 
 
-export type { orderId, cartItems, FullOrder, State, Orders, OptionsState, Product, User }
+export type { orderId, cartItems, FullOrder, State, Orders, OptionsState, Product, User, Store }
