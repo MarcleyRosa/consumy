@@ -1,9 +1,9 @@
 <template>
   <div id="chat-container">
-    <h1>Chat App 2</h1>
+    <h1>Chat</h1>
     <div id="chat-box">
       <div v-for="(message, index) in messages" :key="index" :class="message.class">
-        {{ message.content }}
+        {{ `${message.class === 'user-message' ? 'Eu: ' : 'Loja: '}${message.content}` }}
       </div>
     </div>
     <input type="text" v-model="newMessage" @keyup.enter="sendMessage" placeholder="Type a message..." />
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { createConsumer } from '@rails/actioncable'
 
 const props = defineProps<{
@@ -25,20 +25,32 @@ const newMessage = ref<string>('')
 
 let chatChannel: any = null
 
+const isDuplicateMessage = (messageContent: string) => {
+  return messages.value.some(message => message.content === messageContent);
+};
+
 onMounted(() => {
   const consumer = createConsumer('ws://localhost:3000/cable')
   chatChannel = consumer.subscriptions.create(
     { channel: 'ChatChannel', sender_id: props.senderId, receiver_id: props.receiverId },
     {
-      received(data: { message: string }) {
-         console.log("Received data:", data);
-        messages.value.push({ content: data.message, class: 'bot-message' })
+      received(data: { message: string, sender_id: number }) {
+        console.log("Received data:", data)
+        if (data.sender_id !== props.senderId && !isDuplicateMessage(data.message)) {
+          messages.value.push({ content: data.message, class: 'bot-message' })
+        }
       },
       speak(message: string) {
         this.perform('speak', { message: message })
       }
     }
   )
+})
+
+onUnmounted(() => {
+  if (chatChannel) {
+    chatChannel.unsubscribe();
+  }
 })
 
 const sendMessage = () => {
