@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router';
 import type { FullOrder, OptionsState } from '../utils/interfacesType';
 import { fetchEventSource } from '@microsoft/fetch-event-source';
 import { options, messageState } from '../utils';
+import ChatBox from '@/components/ChatBox.vue';
 
 const state = ref<OptionsState>('loading')
 const route = useRoute()
@@ -69,6 +70,7 @@ onMounted(async () => {
       </div>
     </div>
     <p class="text-xl font-bold mb-4">{{ `Total: ${formatCurrency(total)}` }}</p>
+    <ChatBox :senderId="2" :receiverId="1" />
     <button v-if="messageState[state] === 'completed'" @click="buyAgain" class="px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold rounded-full shadow-lg hover:from-green-500 hover:to-blue-600 transition duration-300 ease-in-out transform hover:-translate-y-1">
       Pedir novamente
     </button>
