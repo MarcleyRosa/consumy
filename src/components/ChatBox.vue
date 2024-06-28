@@ -1,13 +1,31 @@
 <template>
-  <div id="chat-container">
-    <h1>Chat</h1>
-    <div id="chat-box">
-      <div v-for="(message, index) in messages" :key="index" :class="message.class">
-        {{ `${message.class === 'user-message' ? 'Eu: ' : 'Loja: '}${message.content}` }}
+  <div class="fixed bottom-0 right-0 m-4">
+    <button v-if="!isChatOpen" @click="toggleChat" class="bg-blue-500 text-white px-4 py-2 rounded-full">Abrir Chat</button>
+    <div v-if="isChatOpen" id="chat-container" class="w-80 bg-white rounded-lg shadow-lg border border-gray-300">
+      <div class="p-4 border-b border-gray-300 flex justify-between items-center">
+        <h1 class="text-xl font-semibold text-gray-700">Chat</h1>
+        <button @click="toggleChat" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div id="chat-box" class="p-4 overflow-y-auto h-64">
+        <div v-for="(message, index) in messages" :key="index" :class="[message.class, 'mb-2']">
+          {{ `${message.class === 'user-message' ? 'Eu: ' : 'Loja: '}${message.content}` }}
+        </div>
+      </div>
+      <div class="p-4 border-t border-gray-300 flex">
+        <input 
+          type="text" 
+          v-model="newMessage" 
+          @keyup.enter="sendMessage" 
+          placeholder="Digite sua mensagem..." 
+          class="flex-1 border rounded-l-lg px-4 py-2 focus:outline-none"
+        />
+        <button @click="sendMessage" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg send-button">Enviar</button>
       </div>
     </div>
-    <input type="text" v-model="newMessage" @keyup.enter="sendMessage" placeholder="Type a message..." />
-    <button @click="sendMessage">Send</button>
   </div>
 </template>
 
@@ -20,8 +38,13 @@ const props = defineProps<{
   receiverId: number
 }>()
 
+const isChatOpen = ref(false)
 const messages = ref<{ content: string, class: string }[]>([])
 const newMessage = ref<string>('')
+
+const toggleChat = () => {
+  isChatOpen.value = !isChatOpen.value
+}
 
 let chatChannel: any = null
 
@@ -62,45 +85,13 @@ const sendMessage = () => {
 </script>
 
 <style scoped>
-#chat-container {
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  background-color: #f9f9f9;
-}
-#chat-box {
-  max-height: 300px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
-}
 .user-message {
   text-align: right;
   color: blue;
-  margin-bottom: 10px;
 }
 .bot-message {
   text-align: left;
   color: green;
-  margin-bottom: 10px;
 }
-input {
-  width: calc(100% - 90px);
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: blue;
-  color: white;
-  cursor: pointer;
-}
+
 </style>
