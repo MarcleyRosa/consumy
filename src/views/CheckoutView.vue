@@ -35,16 +35,13 @@ watch(data, () => {
   if (data.value.length === 0) router.push('/stores')
 })
 
-const remove = async (event: MouseEvent) => {
-  const { id } = event.target as HTMLButtonElement;
-
+const remove = async (id: string) => {
   await request.delete(`/cart/remove_item/${id}`)
   message.value = 'Produto removido!'
   setTimeout(() => { message.value = ''}, 2000)
 }
 
-const edit = (event: MouseEvent) => {
-  const { id } = event.target as HTMLButtonElement;
+const edit = (id: string) => {
   const [items] = data.value
   const { product: { store_id } } = items
   router.push(`/store/${store_id}/products/${id}`)
@@ -99,14 +96,14 @@ try {
       </div>
       <div class="flex space-x-4">
         <button
-          @click="edit"
+          @click=" () => edit(product_id)"
           :id="product_id"
           class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition duration-300"
         >
           Editar
         </button>
         <button
-          @click="remove"
+          @click="() => remove(product_id)"
           :id="product_id"
           class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition duration-300"
         >
