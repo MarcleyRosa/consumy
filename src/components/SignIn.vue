@@ -30,7 +30,7 @@ function onSubmit() {
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <div class="bg-white p-8 rounded shadow-md w-full max-w-sm">
-      <p class="text-gray-600 mb-4">Email de teste: pasquale.wisozk@example.com</p>
+      <!-- <p class="text-gray-600 mb-4">Email de teste: pasquale.wisozk@example.com</p> -->
       <h1 class="text-2xl font-bold mb-6 text-center">Sign In</h1>
 
       <form @submit.prevent="onSubmit" class="space-y-4">

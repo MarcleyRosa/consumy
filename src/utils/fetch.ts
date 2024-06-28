@@ -1,3 +1,5 @@
+import { useRouter } from "vue-router";
+
 class Request {
   private baseURL: string;
 
@@ -7,8 +9,12 @@ class Request {
 
   private async request<T>(endpoint: string, method: string, data?: any): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
-    
+    const router = useRouter()
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+    if (!token) {
+      router.push('/signin')
+    }
     
     const options: RequestInit = {
       method,
