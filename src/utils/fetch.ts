@@ -12,7 +12,7 @@ class Request {
     const router = useRouter()
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
-    if (!token) {
+    if (!token && endpoint !== '/sign_in') {
       router.push('/signin')
     }
     
