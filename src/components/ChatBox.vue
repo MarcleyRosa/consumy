@@ -12,7 +12,7 @@
       </div>
       <div id="chat-box" class="p-4 overflow-y-auto h-64">
         <div v-for="(message, index) in messages" :key="index" :class="[message.class, 'mb-2']">
-          {{ `${message.class === 'user-message' ? 'Eu: ' : 'Loja: '}${message.content}` }}
+          {{ `${message.class === 'user-message' ? 'Eu: ' : `${data.name}: `}${message.content}` }}
         </div>
       </div>
       <div class="p-4 border-t border-gray-300 flex">
@@ -32,6 +32,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { createConsumer } from '@rails/actioncable'
+import { Request } from '@/utils/fetch';
 
 const props = defineProps<{
   senderId: number,
@@ -41,6 +42,9 @@ const props = defineProps<{
 const isChatOpen = ref(false)
 const messages = ref<{ content: string, class: string }[]>([])
 const newMessage = ref<string>('')
+const url = 'http://localhost:3000';
+const data = ref()
+const request = new Request(url)
 
 const toggleChat = () => {
   isChatOpen.value = !isChatOpen.value
@@ -52,13 +56,16 @@ const isDuplicateMessage = (messageContent: string) => {
   return messages.value.some(message => message.content === messageContent);
 };
 
-onMounted(() => {
+onMounted(async () => {
+  data.value = await request.get(`/stores/${props.receiverId}`)
+
+  messages.value = await request.get(`/messages?sender_id=${props.senderId}&receiver_id=${props.receiverId}`)
+  
   const consumer = createConsumer('ws://localhost:3000/cable')
   chatChannel = consumer.subscriptions.create(
     { channel: 'ChatChannel', sender_id: props.senderId, receiver_id: props.receiverId },
     {
       received(data: { message: string, sender_id: number }) {
-        console.log("Received data:", data)
         if (data.sender_id !== props.senderId && !isDuplicateMessage(data.message)) {
           messages.value.push({ content: data.message, class: 'bot-message' })
         }
@@ -68,6 +75,7 @@ onMounted(() => {
       }
     }
   )
+
 })
 
 onUnmounted(() => {
