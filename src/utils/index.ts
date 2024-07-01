@@ -26,9 +26,10 @@ export function formatDate(value: string) {
 
 export const messageState = reactive<State>({
   loading: 'Carregando...',
+  payment_failed: 'Pagamento não Autorizado',
   created: 'Processando Pagamento...',
   paid: 'Pagamento Efetuado',
-  accepted: 'Pedido Recebido na Loja',
+  accepted: 'Pedido Pecebido na Loja',
   prepared: 'Preparando Pedido',
   shipped: 'Pedido em Rota de Entrega',
   completed: 'Pedido Entregue'

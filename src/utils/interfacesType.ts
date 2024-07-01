@@ -16,7 +16,7 @@ interface Store {
   name: string, id: string, image_url: string, active: boolean
 }
 
-type OptionsState = 'loading' |'created' | 'paid' | 'accepted' | 'prepared' | 'shipped' | 'completed'
+type OptionsState = 'loading' |'created' | 'paid' | 'payment_failed' | 'accepted' | 'prepared' | 'shipped' | 'completed'
 
 interface FullOrder {
   id: number, buyer_id: number, store_id: number, created_at: string, updated_at: string, state: string, order_items: { id: number,
@@ -30,7 +30,8 @@ interface FullOrder {
 }
 
 interface State {
-  loading: string
+  loading: string,
+  payment_failed: string,
   created: string,
   paid: string,
   accepted: string,
