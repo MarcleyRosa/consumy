@@ -11,8 +11,8 @@
         </button>
       </div>
       <div id="chat-box" class="p-4 overflow-y-auto h-64">
-        <div v-for="(message, index) in messages" :key="index" :class="[message.class, 'mb-2']">
-          {{ `${message.class === 'user-message' ? 'Eu: ' : `${data.name}: `}${message.content}` }}
+        <div v-for="(message, index) in messages" :key="index" :class="[message.message_class, 'mb-2']">
+          {{ `${message.message_class === 'user-message' ? 'Eu: ' : `${data.name}: `}${message.content}` }}
         </div>
       </div>
       <div class="p-4 border-t border-gray-300 flex">
@@ -40,7 +40,7 @@ const props = defineProps<{
 }>()
 
 const isChatOpen = ref(false)
-const messages = ref<{ content: string, class: string }[]>([])
+const messages = ref<{ content: string, message_class: string }[]>([])
 const newMessage = ref<string>('')
 const url = 'http://localhost:3000';
 const data = ref()
@@ -63,11 +63,11 @@ onMounted(async () => {
   
   const consumer = createConsumer('ws://localhost:3000/cable')
   chatChannel = consumer.subscriptions.create(
-    { channel: 'ChatChannel', sender_id: props.senderId, receiver_id: props.receiverId },
+    { channel: 'ChatChannel', sender_id: props.senderId, receiver_id: props.receiverId, message_class: 'user-message' },
     {
       received(data: { message: string, sender_id: number }) {
         if (data.sender_id !== props.senderId && !isDuplicateMessage(data.message)) {
-          messages.value.push({ content: data.message, class: 'bot-message' })
+          messages.value.push({ content: data.message, message_class: 'store-message' })
         }
       },
       speak(message: string) {
@@ -86,7 +86,7 @@ onUnmounted(() => {
 
 const sendMessage = () => {
   if (newMessage.value.trim() === '') return
-  messages.value.push({ content: newMessage.value, class: 'user-message' })
+  messages.value.push({ content: newMessage.value, message_class: 'user-message' })
   chatChannel.speak(newMessage.value)
   newMessage.value = ''
 }
@@ -97,7 +97,7 @@ const sendMessage = () => {
   text-align: right;
   color: blue;
 }
-.bot-message {
+.store-message {
   text-align: left;
   color: green;
 }

@@ -70,7 +70,7 @@ onMounted(async () => {
       </div>
     </div>
     <p class="text-xl font-bold mb-4">{{ `Total: ${formatCurrency(total)}` }}</p>
-    <ChatBox :senderId="2" :receiverId="1" />
+    <ChatBox v-if="data.buyer_id" :senderId="data.buyer_id" :receiverId="data.store_id" />
     <button v-if="messageState[state] === 'completed'" @click="buyAgain" class="px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white font-semibold rounded-full shadow-lg hover:from-green-500 hover:to-blue-600 transition duration-300 ease-in-out transform hover:-translate-y-1">
       Pedir novamente
     </button>
